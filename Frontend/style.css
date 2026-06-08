@@ -79,21 +79,55 @@ main {
 }
 
 .content-area {
-    flex: 1;
-    min-height: 0;
-    height: 100%;
-    overflow-y: auto;
+    margin-left: 280px;
+    width: calc(100vw - 280px);
+    max-width: calc(100vw - 280px);
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     background-color: var(--surface-muted);
     padding: 2rem;
+}
+
+.page-scroll-layout {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.page-scroll-layout > :not(.table-card) {
+    flex-shrink: 0;
+}
+
+.page-scroll-layout .table-card {
+    flex: 1;
+    min-height: 0;
+    margin-bottom: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.table-scroll-area {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-scroll-area .table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background-color: var(--surface-soft);
 }
 
 .sidebar {
     width: 280px;
     min-width: 280px;
-    height: 100vh;
-    position: sticky;
-    top: 0;
-    flex-shrink: 0;
+    height: 100%;
     background: var(--sidebar-bg);
     color: var(--sidebar-foreground);
     border-right: 1px solid rgba(255, 255, 255, 0.15);
@@ -101,13 +135,15 @@ main {
 }
 
 #sidebarContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1030;
+    width: 280px;
     min-width: 280px;
     max-width: 280px;
-    flex-shrink: 0;
-    align-self: flex-start;
     height: 100vh;
-    position: sticky;
-    top: 0;
+    overflow: hidden;
 }
 
 .sidebar .nav-pills {
@@ -544,14 +580,32 @@ p {
     #sidebarContainer {
         display: none;
         position: static;
+        width: auto;
         height: auto;
     }
 
     .content-area {
+        margin-left: 0;
+        width: 100%;
+        max-width: 100%;
         padding: 1.5rem;
         height: auto;
         min-height: auto;
         overflow-y: visible;
+        display: block;
+    }
+
+    .page-scroll-layout,
+    .page-scroll-layout .table-card,
+    .table-scroll-area {
+        display: block;
+        overflow: visible;
+        min-height: auto;
+        flex: none;
+    }
+
+    .table-scroll-area .table thead th {
+        position: static;
     }
 
     .sidebar {
