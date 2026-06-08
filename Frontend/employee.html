@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Management System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="d-flex flex-nowrap">
+        <div id="sidebarContainer"></div>
+
+        <div class="content-area flex-grow-1 p-4">
+            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                <i class="bi bi-list"></i> Menu
+            </button>
+            <div class="container-fluid">
+
+                <div id="flashAlertContainer" class="mb-4"></div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 pb-2 mb-4 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1" style="font-size: 2.5rem; font-weight: 800 !important; 
+                        color: var(--text-secondary);">Employee Management</h1>
+                    </div>
+                    <button class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#employeeModal">
+                        <i class="bi bi-person-plus-fill fs-5"></i>
+                        <span>Add New Employee</span>
+                    </button>
+                </div>
+
+                <div class="search-panel mb-4">
+                    <div class="row g-3 align-items-center">
+                        <div class="col-md-5">
+                            <div class="input-group search-input-group">
+                                <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
+                                <input type="search" id="employeeSearch" class="form-control border-start-0 bg-transparent" placeholder="Search employee name..." aria-label="Search employee name">
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <select id="departmentFilter" class="form-select filter-select" aria-label="Filter by department">
+                                <option value="">All departments</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select id="positionFilter" class="form-select filter-select" aria-label="Filter by position">
+                                <option value="">All positions</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm table-card">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="employeeTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="ps-4">ID</th>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Department</th>
+                                    <th scope="col">Position</th>
+                                    <th scope="col">Joined Date</th>
+                                    <th scope="col" class="text-end pe-4">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="employeeTableBody"></tbody>
+                        </table>
+                    </div>
+                 </div>
+                 <nav id="employeePagination" class="mt-3" aria-label="Employee table pagination"></nav>
+            </div>
+        </div>
+
+        <div class="modal fade" id="viewEmployeeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-light py-3 border-0">
+                        <h5 class="modal-title fw-semibold text-dark mb-0">
+                            <i class="bi bi-card-heading me-2 text-info"></i>Employee Profile Details
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <div class="row g-4 align-items-start">
+                            <div class="col-md-3 d-flex flex-column align-items-center">
+                                <div class="bg-info text-white rounded-circle d-flex align-items-center justify-content-center fw-bold fs-4 shadow-sm"
+                                    id="viewAvatar" style="width: 70px; height: 70px;">--</div>
+                                <div class="mt-2 fw-bold text-info border border-info rounded-pill px-3 py-1 small bg-info-subtle"
+                                    id="viewId">001</div>
+                            </div>
+
+                            <div class="col-md-9">
+                                <div class="mb-3">
+                                    <h4 class="mb-1 fw-bold text-dark" id="viewName">Loading...</h4>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Email
+                                                Address</label>
+                                            <div class="fw-medium text-dark" id="viewEmail">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-12">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Phone
+                                                Number</label>
+                                            <div class="fw-medium text-dark" id="viewPhone">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Department</label>
+                                            <div class="text-dark" id="viewDepartment">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Position</label>
+                                            <div class="text-dark" id="viewPosition">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Joined
+                                                Date</label>
+                                            <div class="fw-medium text-dark" id="viewJoinedDate">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="p-3 bg-light rounded-3">
+                                            <label
+                                                class="form-label text-muted small text-uppercase fw-semibold mb-1">Base
+                                                Salary</label>
+                                            <div class="fw-bold text-success fs-5" id="viewSalary">$0.00</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-0 bg-light py-2">
+                        <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close
+                            </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="employeeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-light py-3">
+                        <h5 class="modal-title fw-semibold text-dark">
+                            <i class="bi bi-person-plus me-2 text-primary"></i>Register New Employee
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="createEmployeeForm" class="row g-3 needs-validation" novalidate>
+                            <div class="col-12">
+                                <label for="regName" class="form-label fw-medium">Full Name</label>
+                                <input type="text" class="form-control" id="regName" placeholder="Enter full name"
+                                    required minlength="3">
+                                <div class="invalid-feedback">
+                                    Please enter the employee's full name (at least 3 characters).
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regEmail" class="form-label fw-medium">Email Address</label>
+                                <input type="email" class="form-control" id="regEmail" placeholder="name@company.com"
+                                    required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regPhone" class="form-label fw-medium">Phone Number</label>
+                                <input type="text" inputmode="numeric" class="form-control" id="regPhone" placeholder="09123456789" required pattern="^(\+95|09|0)(?:[\s]?\d){7,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
+                                <div class="invalid-feedback">
+                                    Please enter a valid phone number [9-11 digits]
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="regJoinedDate" class="form-label fw-medium">Joined Date</label>
+                                <input type="date" class="form-control" id="regJoinedDate" required>
+                                <div class="invalid-feedback">
+                                    Please choose the employee's joining date.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regDepartment" class="form-label fw-medium">Department Assignment</label>
+                                <select class="form-select" id="regDepartment" required>
+                                    <option selected disabled value="">Choose Department...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose a department.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="regPosition" class="form-label fw-medium">Position Title</label>
+                                <select class="form-select" id="regPosition" required>
+                                    <option selected disabled value="">Choose Position...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose a position.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="regSalary" class="form-label fw-medium">Base Salary</label>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="text" inputmode="numeric" class="form-control" id="regSalary" placeholder="0.00" min="0"
+                                        step="0.01" required>
+                                </div>
+                                <div class="invalid-feedback">
+                                    Please enter a salary greater than or equal to 0.
+                                </div>
+                            </div>
+                            <div class="col-12 mt-4 d-flex justify-content-end gap-2 border-top pt-3">
+                                <button class="btn btn-light border" type="button"
+                                    data-bs-dismiss="modal">Cancel</button>
+                                <button class="btn btn-primary px-4" type="submit">Save Record</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="editEmployeeModal" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content border-0 shadow-lg">
+                    <div class="modal-header bg-light py-3">
+                        <h5 class="modal-title fw-semibold text-dark">
+                            <i class="bi bi-pencil-square me-2 text-warning"></i>Modify Employee Record
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <form id="editEmployeeForm" class="row g-3 needs-validation" novalidate>
+                            <input type="hidden" id="editEmployeeId">
+                            <div class="col-12">
+                                <label for="editName" class="form-label fw-medium">Full Name</label>
+                                <input type="text" class="form-control" id="editName" required minlength="3">
+                                <div class="invalid-feedback">
+                                    Please enter the employee's full name (at least 3 characters).
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editEmail" class="form-label fw-medium">Email Address</label>
+                                <input type="email" class="form-control" id="editEmail" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
+                                <div class="invalid-feedback">
+                                    Please enter a valid email address.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPhone" class="form-label fw-medium">Phone Number</label>
+                                <input type="text" inputmode="numeric" class="form-control" id="editPhone" required pattern="^(\+95|09|0)(?:[\s]?\d){9,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
+                                <div class="invalid-feedback">
+                                    Please enter a valid phone number [9-11 digits].
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="editJoinedDate" class="form-label fw-medium">Joined Date</label>
+                                <input type="date" class="form-control" id="editJoinedDate" required>
+                                <div class="invalid-feedback">
+                                    Please choose the employee's joining date.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editDepartment" class="form-label fw-medium">Department</label>
+                                <select class="form-select" id="editDepartment" required>
+                                    <option selected disabled value="">Choose Department...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose a department.
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="editPosition" class="form-label fw-medium">Position</label>
+                                <select class="form-select" id="editPosition" required>
+                                    <option selected disabled value="">Choose Position...</option>
+                                </select>
+                                <div class="invalid-feedback">
+                                    Please choose a position.
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <label for="editSalary" class="form-label fw-medium">Base Salary ($)</label>
+                                <input type="text" inputmode="numeric" class="form-control" id="editSalary" min="0" step="0.01" required>
+                                <div class="invalid-feedback">
+                                    Please enter a salary greater than or equal to 0.
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex justify-content-end gap-2 mt-4 border-top pt-3">
+                                <button class="btn btn-light border" type="button"
+                                    data-bs-dismiss="modal">Discard</button>
+                                <button class="btn btn-warning text-dark px-4" type="submit">Update Record</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="modal fade" id="confirmDeleteEmployeeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="mb-0 fw-semibold">Are you sure you want to delete the employee <span id="deleteEmployeeName" class="text-danger"></span>?</p>
+                </div>
+                <div class="modal-footer border-top p-3 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteEmployee()">Yes, delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">EMS Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0" id="offcanvasSidebarBody"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pagination.js"></script>
+    <script>
+        const API_URL = "http://localhost:8080/employees";
+        let employeeCache = [];
+
+        document.addEventListener("DOMContentLoaded", async () => {
+            await fetchLookupData();
+            await fetchAllEmployees();
+
+            const searchInput = document.getElementById('employeeSearch');
+            const departmentFilter = document.getElementById('departmentFilter');
+            const positionFilter = document.getElementById('positionFilter');
+
+            const applyEmployeeFilters = () => {
+                const query = searchInput.value.trim().toLowerCase();
+                const selectedDept = departmentFilter.value;
+                const selectedPos = positionFilter.value;
+
+                const filtered = employeeCache.filter(emp => {
+                    const nameMatch = emp.name.toLowerCase().includes(query);
+                    const deptId = emp.department ? String(emp.department.department_id || emp.department.id || '') : '';
+                    const posId = emp.position ? String(emp.position.position_id || emp.position.id || '') : '';
+                    const deptMatch = !selectedDept || deptId === selectedDept;
+                    const posMatch = !selectedPos || posId === selectedPos;
+                    return nameMatch && deptMatch && posMatch;
+                });
+
+                renderEmployeeTable(filtered);
+            };
+
+            searchInput.addEventListener('input', applyEmployeeFilters);
+            departmentFilter.addEventListener('change', applyEmployeeFilters);
+            positionFilter.addEventListener('change', applyEmployeeFilters);
+
+            const employeeModal = document.getElementById('employeeModal');
+            const editEmployeeModal = document.getElementById('editEmployeeModal');
+
+            if (employeeModal) {
+                employeeModal.addEventListener('hidden.bs.modal', () => {
+                    const form = document.getElementById('createEmployeeForm');
+                    if (form) form.classList.remove('was-validated');
+                });
+            }
+
+            if (editEmployeeModal) {
+                editEmployeeModal.addEventListener('hidden.bs.modal', () => {
+                    const form = document.getElementById('editEmployeeForm');
+                    if (form) form.classList.remove('was-validated');
+                });
+            }
+        });
+
+        async function fetchAllEmployees() {
+            try {
+                const response = await fetch(API_URL);
+                employeeCache = await response.json();
+                renderEmployeeTable(employeeCache);
+            } catch (error) {
+                console.error("Fetch Error:", error);
+                document.getElementById("employeeTableBody").innerHTML = `<tr><td colspan="6" class="text-center text-danger py-4">Server Connection Failed.</td></tr>`;
+                document.getElementById('employeePagination').innerHTML = '';
+                showFlashMessage('danger', 'Unable to load employee data.');
+            }
+        }
+
+        function showFlashMessage(type, message, autoDismissMs = 5000) {
+            const container = document.getElementById('flashAlertContainer');
+            if (!container) return;
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>${message}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 200);
+            }, autoDismissMs);
+        }
+
+        function renderEmployeeTable(data) {
+            const tableBody = document.getElementById("employeeTableBody");
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No employee records match your search.</td></tr>`;
+                document.getElementById('employeePagination').innerHTML = '';
+                return;
+            }
+
+            setupPagination('employeeTableBody', 'employeePagination', data, function(emp) {
+                const deptName = emp.department ? (emp.department.department_name || "Unassigned") : "Unassigned";
+                const posName = emp.position ? (emp.position.position_name || "Unassigned") : "Unassigned";
+                return `
+                    <tr id="row-${emp.id}">
+                        <td class="ps-4 text-dark">EMP-${String(emp.id).padStart(3, '0')}</td>
+                        <td class="text-dark">${emp.name}</td>
+                        <td class="text-dark">${emp.email}</td>
+                        <td class="text-dark">${deptName}</td>
+                        <td class="text-dark">${posName}</td>
+                        <td class="text-dark">${normalizeDateForInput(emp.joinedDate) || 'N/A'}</td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group gap-1">
+                                <button class="btn btn-sm btn-outline-info" onclick="triggerViewModal(${emp.id})"><i class="bi bi-eye"></i></button>
+                                <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${emp.id})"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="showEmployeeDeleteConfirmation(${emp.id}, '${emp.name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }, 5);
+        }
+
+        //Numeric only input box
+        document.querySelectorAll('input[type="text"][inputmode="numeric"]').forEach(input => {
+            input.addEventListener('input', () => {
+                input.value = input.value.replace(/\D/g, '');
+            });
+        });
+
+
+        // [C] CREATE DISPATCH
+        document.getElementById('createEmployeeForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+
+const regDeptValue = document.getElementById('regDepartment').value;
+                const regPosValue = document.getElementById('regPosition').value;
+                const payload = {
+                    name: document.getElementById('regName').value,
+                    email: document.getElementById('regEmail').value,
+                    phoneNo: document.getElementById('regPhone').value,
+                    joinedDate: document.getElementById('regJoinedDate').value,
+                    salary: parseFloat(document.getElementById('regSalary').value) || 0,
+                    department: regDeptValue ? { department_id: parseInt(regDeptValue) } : null,
+                    position: regPosValue ? { position_id: parseInt(regPosValue) } : null
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('employeeModal')).hide();
+                    this.reset();
+                    this.classList.remove('was-validated');
+                    fetchAllEmployees();
+                    showFlashMessage('success', 'Employee added successfully.');
+                } else {
+                    showFlashMessage('danger', 'Unable to add employee.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Unable to add employee.');
+            }
+        });
+
+        // POPULATE VIEW TARGETS - Repositioned ID handling
+        function triggerViewModal(id) {
+            const emp = employeeCache.find(e => e.id === id);
+            if (!emp) return;
+
+            const initials = emp.name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
+
+            document.getElementById('viewAvatar').textContent = initials;
+            document.getElementById('viewName').textContent = emp.name;
+            // Removed # prefix as requested
+            document.getElementById('viewId').textContent = `EMP-${String(emp.id).padStart(3, '0')}`;
+            document.getElementById('viewEmail').textContent = emp.email;
+            document.getElementById('viewPhone').textContent = emp.phoneNo || 'N/A';
+            document.getElementById('viewJoinedDate').textContent = emp.joinedDate || 'N/A';
+            document.getElementById('viewDepartment').textContent = emp.department ? emp.department.department_name : 'Unassigned';
+            document.getElementById('viewPosition').textContent = emp.position ? emp.position.position_name : 'Unassigned';
+            document.getElementById('viewSalary').textContent = `$${parseFloat(emp.salary).toFixed(2)}`;
+
+            new bootstrap.Modal(document.getElementById('viewEmployeeModal')).show();
+        }
+
+        // [U] UPDATE STAGE A
+        function triggerEditModal(id) {
+            const emp = employeeCache.find(e => e.id === id);
+            if (!emp) return;
+
+            document.getElementById('editEmployeeId').value = emp.id;
+            document.getElementById('editName').value = emp.name;
+            document.getElementById('editEmail').value = emp.email;
+            document.getElementById('editPhone').value = emp.phoneNo || '';
+            document.getElementById('editJoinedDate').value = normalizeDateForInput(emp.joinedDate);
+            document.getElementById('editSalary').value = emp.salary;
+
+            document.getElementById('editDepartment').value = emp.department?.department_id || emp.department?.id || '';
+            document.getElementById('editPosition').value = emp.position?.position_id || emp.position?.id || '';
+
+            new bootstrap.Modal(document.getElementById('editEmployeeModal')).show();
+        }
+
+        function normalizeDateForInput(value) {
+            if (!value) return '';
+            if (typeof value === 'string') {
+                return value.split('T')[0];
+            }
+            if (typeof value === 'object' && value.year && value.month && value.day) {
+                const month = String(value.month).padStart(2, '0');
+                const day = String(value.day).padStart(2, '0');
+                return `${value.year}-${month}-${day}`;
+            }
+            return '';
+        }
+
+        // [U] UPDATE STAGE B - FIXED Payload keys
+        document.getElementById('editEmployeeForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+
+            const id = document.getElementById('editEmployeeId').value;
+            const editDeptValue = document.getElementById('editDepartment').value;
+            const editPosValue = document.getElementById('editPosition').value;
+            const payload = {
+                id: parseInt(id),
+                name: document.getElementById('editName').value,
+                email: document.getElementById('editEmail').value,
+                phoneNo: document.getElementById('editPhone').value,
+                joinedDate: document.getElementById('editJoinedDate').value,
+                salary: parseFloat(document.getElementById('editSalary').value) || 0,
+                department: editDeptValue ? { department_id: parseInt(editDeptValue) } : null,
+                position: editPosValue ? { position_id: parseInt(editPosValue) } : null
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('editEmployeeModal')).hide();
+                    fetchAllEmployees();
+                    showFlashMessage('success', 'Employee updated successfully.');
+                } else {
+                    showFlashMessage('danger', 'Unable to update employee.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Unable to update employee.');
+            }
+        });
+
+        let deleteEmployeeId = null;
+
+        function showEmployeeDeleteConfirmation(id, name) {
+            deleteEmployeeId = id;
+            document.getElementById('deleteEmployeeName').textContent = name;
+            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteEmployeeModal'));
+            deleteModal.show();
+        }
+
+        async function deleteEmployee() {
+            if (!deleteEmployeeId) {
+                return;
+            }
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteEmployeeModal'));
+            try {
+                const response = await fetch(`${API_URL}/${deleteEmployeeId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    deleteModal?.hide();
+                    deleteEmployeeId = null;
+                    fetchAllEmployees();
+                    showFlashMessage('success', 'Employee deleted successfully.');
+                } else {
+                    deleteModal?.hide();
+                    showFlashMessage('danger', 'Unable to delete employee.');
+                }
+            } catch (error) {
+                deleteModal?.hide();
+                showFlashMessage('danger', 'Unable to delete employee.');
+            }
+        }
+
+        async function fetchLookupData() {
+            try {
+                const [dResp, pResp] = await Promise.all([
+                    fetch('http://localhost:8080/departments'),
+                    fetch('http://localhost:8080/positions')
+                ]);
+                const depts = await dResp.json();
+                const poss = await pResp.json();
+
+                const populate = (el, data, idKey, nameKey) => {
+                    const select = document.getElementById(el);
+                    while (select.options.length > 1) select.remove(1);
+                    data.forEach(item => {
+                        const opt = document.createElement('option');
+                        opt.value = item[idKey];
+                        opt.textContent = item[nameKey];
+                        select.appendChild(opt);
+                    });
+                };
+
+                populate('departmentFilter', depts, 'department_id', 'department_name');
+                populate('regDepartment', depts, 'department_id', 'department_name');
+                populate('editDepartment', depts, 'department_id', 'department_name');
+                populate('positionFilter', poss, 'position_id', 'position_name');
+                populate('regPosition', poss, 'position_id', 'position_name');
+                populate('editPosition', poss, 'position_id', 'position_name');
+            } catch (err) { console.error('Lookup Error'); }
+        }
+    </script>
+</body>
+
+</html>

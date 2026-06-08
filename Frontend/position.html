@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Position Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="d-flex flex-nowrap">
+        <div id="sidebarContainer"></div>
+
+        <div class="content-area flex-grow-1 p-4">
+            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                <i class="bi bi-list"></i>
+                Menu
+            </button>
+            <div class="container-fluid">
+
+                <div id="flashAlertContainer" class="mb-4"></div>
+
+                <div class="d-flex justify-content-between align-items-center pt-2 pb-2 mb-4 border-bottom">
+                    <div>
+                        <h1 class="h2 mb-1" style="font-size: 2.5rem; font-weight: 800 
+                        !important; color: var(--text-secondary);">Position Management</h1>
+                    </div>
+                    <button class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
+                        data-bs-target="#posModal">
+                        <i class="bi bi-briefcase-fill fs-5"></i>
+                        <span>Add New Position</span>
+                    </button>
+                </div>
+
+                <div class="search-panel mb-4">
+                    <div class="input-group search-input-group">
+                        <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
+                        <input type="search" id="posSearch" class="form-control border-start-0 bg-transparent" placeholder="Search position name..." aria-label="Search position name">
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm table-card">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0" id="positionTable">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col" class="ps-4" style="width: 20%;">Position ID</th>
+                                    <th scope="col" style="width: 60%;">Job Title / Position Name</th>
+                                    <th scope="col" class="text-end pe-4" style="width: 20%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="posTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+                <nav id="posPagination" class="mt-3" aria-label="Position table pagination"></nav>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Create Position Modal -->
+    <div class="modal fade" id="posModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-briefcase me-2 text-primary"></i>Create Corporate Position
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="createPosForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="regPosName" class="form-label fw-medium">Position / Title Name</label>
+                            <input type="text" class="form-control" id="regPosName" placeholder="e.g., Senior Developer" required minlength="3">
+                            <div class="invalid-feedback">
+                                Please enter the position name (at least 3 characters).
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex justify-content-end gap-2 border-top pt-3">
+                            <button class="btn btn-light border" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary px-4" type="submit">Save Position</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Position Modal -->
+    <div class="modal fade" id="editPosModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-pencil-square me-2 text-warning"></i>Modify Position Title
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="editPosForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="editPosId">
+                        <div class="mb-3">
+                            <label for="editPosName" class="form-label fw-medium">Position Name</label>
+                            <input type="text" class="form-control" id="editPosName" required minlength="3">
+                            <div class="invalid-feedback">
+                                Please enter the position name (at least 3 characters).
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4 border-top pt-3">
+                            <button class="btn btn-light border" type="button" data-bs-dismiss="modal">Discard</button>
+                            <button class="btn btn-warning text-dark px-4" type="submit">Update Title</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeletePositionModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="mb-0 fw-semibold">Are you sure you want to delete the position <span id="deletePositionName" class="text-danger"></span>?</p>
+                </div>
+                <div class="modal-footer border-top p-3 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deletePosition()">Yes, delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">EMS Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0" id="offcanvasSidebarBody"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pagination.js"></script>
+    <script>
+        const API_URL = "http://localhost:8080/positions";
+        let posCache = [];
+
+        document.addEventListener("DOMContentLoaded", fetchAllPositions);
+
+        // [R] READ LOOKUP ENGINE
+        async function fetchAllPositions() {
+            try {
+                const response = await fetch(API_URL);
+                posCache = await response.json();
+                
+                const tableBody = document.getElementById("posTableBody");
+                if (posCache.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted py-4">No positions registered in database.</td></tr>`;
+                    document.getElementById('posPagination').innerHTML = '';
+                    return;
+                }
+
+                // Use pagination helper for positions (10 rows per page)
+                setupPagination('posTableBody', 'posPagination', posCache, function(pos) {
+                    return `
+                        <tr id="row-pos-${pos.position_id}">
+                            <td class="ps-4 fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
+                            <td class="text-dark">${pos.position_name}</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group gap-1">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }, 5);
+            } catch (error) {
+                console.error("Database connection failure:", error);
+                document.getElementById("posTableBody").innerHTML = `<tr><td colspan="3" class="text-center text-danger py-4">Error: Unable to connect to backend server.</td></tr>`;
+                showFlashMessage('danger', 'Unable to load positions.');
+            }
+        }
+
+        function showFlashMessage(type, message, autoDismissMs = 5000) {
+            const container = document.getElementById('flashAlertContainer');
+            if (!container) return;
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>${message}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 200);
+            }, autoDismissMs);
+        }
+
+        function renderPositionTable(data) {
+            const tableBody = document.getElementById("posTableBody");
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted py-4">No positions match your search.</td></tr>`;
+                document.getElementById('posPagination').innerHTML = '';
+                return;
+            }
+
+            setupPagination('posTableBody', 'posPagination', data, function(pos) {
+                return `
+                    <tr id="row-pos-${pos.position_id}">
+                        <td class="ps-4 fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
+                        <td class="text-dark">${pos.position_name}</td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group gap-1">
+                                <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }, 5);
+        }
+
+        document.getElementById('posSearch').addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const filtered = posCache.filter(pos => pos.position_name.toLowerCase().includes(query));
+            renderPositionTable(filtered);
+        });
+
+        // [C] CREATE ENGINE
+        document.getElementById('createPosForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+
+            // FIXED: Map payload key exactly to match your backend entity field 'position_name'
+            const payload = {
+                position_name: document.getElementById('regPosName').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('posModal')).hide();
+                    this.reset();
+                    this.classList.remove('was-validated');
+                    fetchAllPositions();
+                    showFlashMessage('success', 'Position saved successfully.');
+                } else {
+                    showFlashMessage('danger', 'Could not save new position.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Could not save new position.');
+            }
+        });
+
+        // [U] UPDATE STAGE A: Populate Inputs
+        function triggerEditModal(id) {
+            // FIXED: Evaluated lookups targeting 'p.position_id' properly
+            const pos = posCache.find(p => p.position_id === id);
+            if (!pos) return;
+
+            document.getElementById('editPosId').value = pos.position_id;
+            // FIXED: Grab field 'position_name' accurately from the found object
+            document.getElementById('editPosName').value = pos.position_name;
+
+            new bootstrap.Modal(document.getElementById('editPosModal')).show();
+        }
+
+        // [U] UPDATE STAGE B: Execute Command
+        document.getElementById('editPosForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) return;
+
+            const id = document.getElementById('editPosId').value;
+            
+            // FIXED: Building object using proper tracking ID and tracking title strings
+            const payload = {
+                position_id: parseInt(id),
+                position_name: document.getElementById('editPosName').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('editPosModal')).hide();
+                    fetchAllPositions();
+                    showFlashMessage('success', 'Position updated successfully.');
+                } else {
+                    showFlashMessage('danger', 'Failed to modify position data.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Failed to modify position data.');
+            }
+        });
+
+        // [D] DELETE DISPATCH ENGINE
+        let deletePositionId = null;
+
+        function showPositionDeleteConfirmation(id, name) {
+            deletePositionId = id;
+            document.getElementById('deletePositionName').textContent = name;
+            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeletePositionModal'));
+            deleteModal.show();
+        }
+
+        async function deletePosition() {
+            if (!deletePositionId) {
+                return;
+            }
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeletePositionModal'));
+            try {
+                const response = await fetch(`${API_URL}/${deletePositionId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    deleteModal?.hide();
+                    deletePositionId = null;
+                    fetchAllPositions();
+                    showFlashMessage('success', 'Position deleted successfully.');
+                } else {
+                    deleteModal?.hide();
+                    showFlashMessage('danger', 'Position cannot be deleted. Ensure there are no employees assigned to this position.');
+                }
+            } catch (error) {
+                deleteModal?.hide();
+                showFlashMessage('danger', 'Position cannot be deleted. Ensure there are no employees assigned to this position.');
+            }
+        }
+    </script>
+</body>
+
+</html>

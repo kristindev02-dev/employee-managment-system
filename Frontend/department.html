@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Management</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="d-flex flex-nowrap">
+        <div id="sidebarContainer"></div>
+
+        <div class="content-area flex-grow-1 p-4">
+            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                <i class="bi bi-list"></i>
+                Menu
+            </button>
+            <div class="container-fluid">
+
+            <div id="flashAlertContainer" class="mb-4"></div>
+
+            <div class="d-flex justify-content-between align-items-center pt-2 pb-2 mb-4 border-bottom">
+                <div>
+                    <h1 class="h2 mb-1" style="font-size: 2.5rem; font-weight: 800 
+                    !important; color: var(--text-secondary);">Department Management</h1>
+                </div>
+                <button class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#deptModal">
+                    <i class="bi bi-building-add fs-5"></i>
+                    <span>Add New Department</span>
+                </button>
+            </div>
+
+            <div class="search-panel mb-4">
+                <div class="input-group search-input-group">
+                    <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
+                    <input type="search" id="deptSearch" class="form-control border-start-0 bg-transparent" placeholder="Search department name..." aria-label="Search department name">
+                </div>
+            </div>
+            <div class="card border-0 shadow-sm table-card">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" id="departmentTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col" class="ps-4" style="width: 15%;">Dept ID</th>
+                                <th scope="col" style="width: 50%;">Department Name</th>
+                                <th scope="col" style="width: 15%;">Employees</th>
+                                <th scope="col" class="text-end pe-4" style="width: 20%;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="deptTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <nav id="deptPagination" class="mt-3" aria-label="Department table pagination"></nav>
+
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Confirm Delete
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 text-center">
+                    <p class="mb-0 fw-semibold">Are you sure you want to delete the department <span id="deleteDeptName" class="text-danger"></span>?</p>
+                </div>
+                <div class="modal-footer border-top p-3 justify-content-center gap-2">
+                    <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" onclick="deleteDepartment()">Yes, delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-building me-2 text-primary"></i>Create Department
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="createDeptForm" class="needs-validation" novalidate>
+                        <div class="mb-3">
+                            <label for="regDeptName" class="form-label fw-medium">Department Name</label>
+                            <input type="text" class="form-control" id="regDeptName" placeholder="e.g., IT Department" required minlength="3">
+                            <div class="invalid-feedback">
+                                Please enter the department name (at least 3 characters).
+                            </div>
+                        </div>
+                        <div class="mt-4 d-flex justify-content-end gap-2 border-top pt-3">
+                            <button class="btn btn-light border" type="button" data-bs-dismiss="modal">Cancel</button>
+                            <button class="btn btn-primary px-4" type="submit">Save Department</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="editDeptModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-light py-3">
+                    <h5 class="modal-title fw-semibold text-dark">
+                        <i class="bi bi-pencil-square me-2 text-warning"></i>Modify Department Name
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="editDeptForm" class="needs-validation" novalidate>
+                        <input type="hidden" id="editDeptId">
+                        <div class="mb-3">
+                            <label for="editDeptName" class="form-label fw-medium">Department Name</label>
+                            <input type="text" class="form-control" id="editDeptName" required minlength="3">
+                            <div class="invalid-feedback">
+                                Please enter the department name (at least 3 characters).
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2 mt-4 border-top pt-3">
+                            <button class="btn btn-light border" type="button" data-bs-dismiss="modal">Discard</button>
+                            <button class="btn btn-warning text-dark px-4" type="submit">Update Name</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">EMS Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0" id="offcanvasSidebarBody"></div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/layout.js"></script>
+    <script src="js/pagination.js"></script>
+    <script>
+        const API_URL = "http://localhost:8080/departments";
+        let deptCache = [];
+
+        document.addEventListener("DOMContentLoaded", fetchAllDepartments);
+
+        // [R] READ LOOKUP ENGINE
+        async function fetchAllDepartments() {
+            try {
+                const response = await fetch(API_URL);
+                deptCache = await response.json();
+                
+                const tableBody = document.getElementById("deptTableBody");
+                if (deptCache.length === 0) {
+                    tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No active departments registered in the database.</td></tr>`;
+                    document.getElementById('deptPagination').innerHTML = '';
+                    return;
+                }
+
+                // Use pagination helper for departments (10 rows per page)
+                setupPagination('deptTableBody', 'deptPagination', deptCache, function(dept) {
+                    return `
+                        <tr id="row-dept-${dept.department_id}">
+                            <td class="ps-4 fw-medium text-secondary">DPT-${String(dept.department_id).padStart(3, '0')}</td>
+                            <td class="text-dark">${dept.department_name}</td>
+                            <td>${dept.employees != null ? dept.employees : 0}</td>
+                            <td class="text-end pe-4">
+                                <div class="btn-group gap-1">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${dept.department_id})"><i class="bi bi-pencil"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }, 5);
+            } catch (error) {
+                console.error("Database connection failure:", error);
+                document.getElementById("deptTableBody").innerHTML = `<tr><td colspan="3" class="text-center text-danger py-4">Error: Unable to connect to backend server.</td></tr>`;
+                showFlashMessage('danger', 'Unable to load departments.');
+            }
+        }
+
+        function showFlashMessage(type, message, autoDismissMs = 5000) {
+            const container = document.getElementById('flashAlertContainer');
+            if (!container) return;
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type} alert-dismissible fade show`;
+            alert.setAttribute('role', 'alert');
+            alert.innerHTML = `
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div>${message}</div>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            `;
+            container.innerHTML = '';
+            container.appendChild(alert);
+            setTimeout(() => {
+                alert.classList.remove('show');
+                setTimeout(() => alert.remove(), 200);
+            }, autoDismissMs);
+        }
+
+        function renderDepartmentTable(data) {
+            const tableBody = document.getElementById("deptTableBody");
+            if (data.length === 0) {
+                tableBody.innerHTML = `<tr><td colspan="4" class="text-center text-muted py-4">No departments match your search.</td></tr>`;
+                document.getElementById('deptPagination').innerHTML = '';
+                return;
+            }
+
+            setupPagination('deptTableBody', 'deptPagination', data, function(dept) {
+                return `
+                    <tr id="row-dept-${dept.department_id}">
+                        <td class="ps-4 fw-medium text-secondary">DPT-${String(dept.department_id).padStart(3, '0')}</td>
+                        <td class="text-dark">${dept.department_name}</td>
+                        <td>${dept.employees != null ? dept.employees : 0}</td>
+                        <td class="text-end pe-4">
+                            <div class="btn-group gap-1">
+                                <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${dept.department_id})"><i class="bi bi-pencil"></i></button>
+                                <button class="btn btn-sm btn-outline-danger" onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }, 5);
+        }
+
+        document.getElementById('deptSearch').addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            const filtered = deptCache.filter(dept => dept.department_name.toLowerCase().includes(query));
+            renderDepartmentTable(filtered);
+        });
+
+        // [C] CREATE ENGINE
+        document.getElementById('createDeptForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
+
+                const payload = {
+                department_name: document.getElementById('regDeptName').value
+            };
+
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('deptModal')).hide();
+                    this.reset();
+                    this.classList.remove('was-validated');
+                    fetchAllDepartments();
+                    showFlashMessage('success', 'Department saved successfully.');
+                } else {
+                    showFlashMessage('danger', 'Could not save new department.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Could not save new department.');
+            }
+        });
+
+        // [U] UPDATE STAGE A: Populate Inputs
+        function triggerEditModal(id) {
+            const dept = deptCache.find(d => d.department_id === id);
+            if (!dept) return;
+
+            document.getElementById('editDeptId').value = dept.department_id;
+            document.getElementById('editDeptName').value = dept.department_name;
+
+            new bootstrap.Modal(document.getElementById('editDeptModal')).show();
+        }
+
+        // [U] UPDATE STAGE B: Execute Command
+        document.getElementById('editDeptForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+            if (!this.checkValidity()) return;
+
+            const id = document.getElementById('editDeptId').value;
+            const payload = {
+                department_id: parseInt(id),
+                department_name: document.getElementById('editDeptName').value
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
+                    bootstrap.Modal.getInstance(document.getElementById('editDeptModal')).hide();
+                    fetchAllDepartments();
+                    showFlashMessage('success', 'Department updated successfully.');
+                } else {
+                    showFlashMessage('danger', 'Failed to modify department data.');
+                }
+            } catch (error) {
+                showFlashMessage('danger', 'Failed to modify department data.');
+            }
+        });
+
+        let deleteDepartmentId = null;
+
+        function showDeleteConfirmation(id, name) {
+            deleteDepartmentId = id;
+            document.getElementById('deleteDeptName').textContent = name;
+            const deleteModal = new bootstrap.Modal(document.getElementById('confirmDeleteModal'));
+            deleteModal.show();
+        }
+
+        async function deleteDepartment() {
+            if (!deleteDepartmentId) {
+                return;
+            }
+            const deleteModal = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+            try {
+                const response = await fetch(`${API_URL}/${deleteDepartmentId}`, { method: 'DELETE' });
+                if (response.ok) {
+                    deleteModal?.hide();
+                    deleteDepartmentId = null;
+                    fetchAllDepartments();
+                    showFlashMessage('success', 'Department deleted successfully.');
+                } else {
+                    deleteModal?.hide();
+                    showFlashMessage('danger', 'Department cannot be deleted. Ensure there are no employees assigned to this department.');
+                }
+            } catch (error) {
+                deleteModal?.hide();
+                showFlashMessage('danger', 'Department cannot be deleted. Ensure there are no employees assigned to this department.');
+            }
+        }
+    </script>
+</body>
+
+</html>

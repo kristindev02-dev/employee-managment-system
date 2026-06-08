@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS - Dashboard Overview</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <main class="d-flex flex-nowrap">
+        <!-- Sidebar Injection Hook -->
+        <div id="sidebarContainer"></div>
+
+        <!-- Main Content Viewport -->
+        <div class="content-area flex-grow-1 p-4">
+            <!-- Mobile Menu Toggle Button -->
+            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+                <i class="bi bi-list"></i> Menu
+            </button>
+
+            <div class="container-fluid">
+                <!-- Header Title Bar -->
+                <div class="position-relative pt-2 pb-2 mb-4 border-bottom" style="min-height: 80px;">
+                    <!-- Fixed Color & Enhanced Typography with Premium Soft Shadow -->
+                    <div class="position-absolute start-50 top-50 translate-middle d-flex align-items-center gap-3">
+                        <i class="bi bi-layout-grid-fill fs-2" style="color: var(--accent);"></i>
+                        <span class="h1 mb-0 fw-extrabold" style="color: var(--text-secondary); 
+                        text-shadow: 2px 2px 4px var(--text-shadow); font-size: 3.5rem; letter-spacing: -0.03em; font-weight: 800;">DASHBOARD</span>
+                    </div>
+                    <div class="text-end text-secondary small fw-medium">
+                        <i class="bi bi-calendar3 me-1"></i> <span id="currentDate"></span>
+                    </div>
+                </div>
+
+                <!-- Core KPIs Rows -->
+                <div class="row g-3 mb-4">
+                    <!-- KPI Card 1: Total Employees -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <!-- Changed color to text-secondary & made bolder to match main card headings -->
+                                    <h6 class="text-secondary text-uppercase small fw-extrabold mb-2" style="letter-spacing: 0.06em; font-weight: 700; font-size: 1.25rem;">Total Headcount</h6>
+                                    <!-- Scaled up numbers dramatically and applied fw-extrabold -->
+                                    <h2 class="display-4 fw-extrabold text-secondary mb-0" id="metricTotalEmployees" style="font-size: 3rem; font-weight: 800 !important; color: var(--text-primary);">0</h2>
+                                </div>
+                                <div class="bg-primary-subtle text-primary rounded p-3 fs-3 d-flex align-items-center justify-content-center"
+                                    style="width: 65px; height: 65px;">
+                                    <i class="bi bi-people-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- KPI Card 2: Departments Count -->
+                    <div class="col-md-6">
+                        <div class="card border-0 shadow-sm p-4">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <div>
+                                    <!-- Changed color to text-secondary & made bolder to match main card headings -->
+                                    <h6 class="text-secondary text-uppercase small fw-extrabold mb-2" style="font-weight: 700; font-size: 1.25rem;">Departments</h6>
+                                    <!-- Scaled up numbers dramatically and applied fw-extrabold -->
+                                    <h2 class="display-4 fw-extrabold text-secondary mb-0" id="metricTotalDepts" style="font-size: 3rem; font-weight: 800 !important; color: var(--text-primary);">0</h2>
+                                </div>
+                                <div class="bg-success-subtle text-success rounded p-3 fs-3 d-flex align-items-center justify-content-center"
+                                    style="width: 65px; height: 65px;">
+                                    <i class="bi bi-diagram-3-fill"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytical Summary Splits -->
+                <div class="row g-4">
+                    <!-- Department Segment Distribution Allocation List -->
+                    <div class="col-lg-7">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-0">
+                                <h5 class="mb-0 text-secondary fw-extrabold" style="font-weight: 700; font-size: 1.25rem;">Department Headcount</h5>
+                                <span class="badge bg-light text-secondary border">By Employee Count</span>
+                            </div>
+                            <div class="card-body">
+                                <div id="deptDistributionList" class="d-flex flex-column gap-4">
+                                    <div class="text-center py-4 text-muted">Calculating distributions...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Team Additions Feed Component -->
+                    <div class="col-lg-5">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div class="card-header bg-white py-3 border-0">
+                                <h5 class="mb-0 text-secondary fw-extrabold" style="font-weight: 700; font-size: 1.25rem;">Recent Onboardings</h5>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="recentHiresList">
+                                    <div class="p-4 text-center text-muted">Parsing recent records...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Offcanvas Container Backing For Collapsed Screens -->
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="sidebarOffcanvas" aria-labelledby="sidebarOffcanvasLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarOffcanvasLabel">EMS Menu</h5>
+            <button type="button" class="btn-close text-reset" data-bs-toggle="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-0" id="offcanvasSidebarBody"></div>
+    </div>
+
+    <!-- Script Resource Execution Chains -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="js/layout.js"></script>
+    <script>
+        const API_EMPLOYEES = "http://localhost:8080/employees";
+        const API_DEPARTMENTS = "http://localhost:8080/departments";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            // Set dynamic header calendar item
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', {
+                weekday: 'short', year: 'numeric', month: 'short', day: 'numeric'
+            });
+
+            // Execute metric rendering cycle
+            generateDashboardOverview();
+        });
+
+        async function generateDashboardOverview() {
+            try {
+                // Parallel batch load tracking entities
+                const [empResp, deptResp] = await Promise.all([
+                    fetch(API_EMPLOYEES),
+                    fetch(API_DEPARTMENTS)
+                ]);
+
+                const employees = await empResp.json();
+                const departments = await deptResp.json();
+
+                // Aggregator values initialized
+                const totalEmployees = employees.length;
+                const totalDepts = departments.length;
+                let deptCounts = {};
+
+                // Count department footprints
+                employees.forEach(emp => {
+                    const deptName = emp.department ? (emp.department.department_name || "Unassigned") : "Unassigned";
+                    deptCounts[deptName] = (deptCounts[deptName] || 0) + 1;
+                });
+
+                // --- UI RENDER STAGE A: Core Summary Counters ---
+                document.getElementById('metricTotalEmployees').textContent = totalEmployees;
+                document.getElementById('metricTotalDepts').textContent = totalDepts;
+
+                // --- UI RENDER STAGE B: Department Progress Rails ---
+                const deptContainer = document.getElementById('deptDistributionList');
+                deptContainer.innerHTML = "";
+
+                if (Object.keys(deptCounts).length === 0) {
+                    deptContainer.innerHTML = `<p class="text-muted text-center py-3">No active department allocations found.</p>`;
+                } else {
+                    Object.entries(deptCounts).forEach(([name, count]) => {
+                        const percentage = totalEmployees > 0 ? ((count / totalEmployees) * 100).toFixed(0) : 0;
+                        // FIX: Changed metrics text-muted/mint color scheme to professional text-secondary matching rules
+                        deptContainer.innerHTML += `
+                            <div>
+                                <div class="d-flex justify-content-between small mb-1">
+                                    <span class="fw-bold text-secondary" style="color: var(--text-primary); font-size: 0.95rem;">${name}</span>
+                                    <span class="fw-semibold text-secondary">${count} Staff (${percentage}%)</span>
+                                </div>
+                                <div class="progress rounded-pill" style="height: 24px; background-color: rgba(36, 158, 148, 0.12);">
+                                    <div class="progress-bar bg-primary rounded-pill" role="progressbar" style="width: ${percentage}%; height: 100%;" aria-valuenow="${percentage}" aria-valuemin="0" aria-valuemax="100"></div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                // --- UI RENDER STAGE C: Recent Additions Timeline List ---
+                const recentContainer = document.getElementById('recentHiresList');
+                recentContainer.innerHTML = "";
+
+                // Sort by structural join validation date array maps (Newest additions bubble up)
+                const sortedEmployees = [...employees].sort((a, b) => new Date(b.joinedDate || 0) - new Date(a.joinedDate || 0));
+                const targetRecentFeed = sortedEmployees.slice(0, 4);
+
+                if (targetRecentFeed.length === 0) {
+                    recentContainer.innerHTML = `<div class="p-4 text-center text-muted">No recent employee records logged.</div>`;
+                } else {
+                    targetRecentFeed.forEach(emp => {
+                        const posName = emp.position ? (emp.position.position_name || "Staff Member") : "Staff Member";
+                        const avatarInitial = emp.name ? emp.name.charAt(0).toUpperCase() : "?";
+
+                        // FIX: Swapped out clashing light mint department badge texts to clean, readable text-secondary styles
+                        recentContainer.innerHTML += `
+                            <div class="list-group-item d-flex align-items-center gap-3 py-3 border-0 border-bottom">
+                                <div class="bg-light text-secondary rounded-circle d-flex align-items-center justify-content-center fw-bold" style="width: 42px; height: 42px; font-size: 14px; border: 1px solid #e2e8f0;">
+                                    ${avatarInitial}
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="mb-0 text-secondary small fw-bold" style="color: var(--text-primary);">${emp.name}</h6>
+                                    <small class="text-secondary fw-medium">${posName}</small>
+                                </div>
+                                <div class="text-end">
+                                    <span class="badge bg-light text-secondary border font-monospace small">${emp.joinedDate || 'N/A'}</span>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+            } catch (error) {
+                console.error("Dashboard Aggregation Processing Failure:", error);
+                document.getElementById('deptDistributionList').innerHTML = `<p class="text-center text-danger small py-2">Failed to sync metric maps from active services.</p>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
