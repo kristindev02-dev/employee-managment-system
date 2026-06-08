@@ -48,10 +48,13 @@
                                 <option value="">All departments</option>
                             </select>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <select id="positionFilter" class="form-select filter-select" aria-label="Filter by position">
                                 <option value="">All positions</option>
                             </select>
+                        </div>
+                        <div class="col-md-auto d-flex">
+                            <button id="employeeResetBtn" type="button" class="btn btn-light border ms-2">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -379,6 +382,17 @@
             searchInput.addEventListener('input', applyEmployeeFilters);
             departmentFilter.addEventListener('change', applyEmployeeFilters);
             positionFilter.addEventListener('change', applyEmployeeFilters);
+
+            const employeeResetBtn = document.getElementById('employeeResetBtn');
+            if (employeeResetBtn) {
+                employeeResetBtn.addEventListener('click', () => {
+                    searchInput.value = '';
+                    departmentFilter.value = '';
+                    positionFilter.value = '';
+                    applyEmployeeFilters();
+                    searchInput.focus();
+                });
+            }
 
             const employeeModal = document.getElementById('employeeModal');
             const editEmployeeModal = document.getElementById('editEmployeeModal');
