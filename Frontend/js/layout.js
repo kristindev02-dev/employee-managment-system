@@ -20,10 +20,12 @@ async function loadSidebar() {
         const offcanvasBody = document.getElementById("offcanvasSidebarBody");
 
         if (desktopContainer) {
+            desktopContainer.innerHTML = "";
             desktopContainer.appendChild(sidebar.cloneNode(true));
         }
 
         if (offcanvasBody) {
+            offcanvasBody.innerHTML = "";
             offcanvasBody.appendChild(sidebar.cloneNode(true));
         }
 

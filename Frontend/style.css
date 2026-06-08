@@ -67,32 +67,36 @@ button, input, select, textarea {
 
 main {
     display: flex;
+    align-items: stretch;
     min-height: 100vh;
-    overflow: hidden;
 }
 
 .content-area {
     flex: 1;
-    overflow-y: auto;
+    min-width: 0;
     background-color: var(--surface-muted);
     padding: 2rem;
 }
 
 .sidebar {
-    width: 280px;
-    min-width: 280px;
+    width: 100%;
     height: 100vh;
-    position: sticky;
-    top: 0;
-    background: var(--sidebar-bg);
+    background: var(--sidebar-bg) !important;
     color: var(--sidebar-foreground);
     border-right: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 0 30px rgba(0, 46, 64, 0.08);
 }
 
 #sidebarContainer {
+    flex: 0 0 280px;
+    width: 280px;
     min-width: 280px;
     max-width: 280px;
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    height: 100vh;
+    z-index: 100;
 }
 
 .sidebar .nav-pills {
@@ -360,20 +364,16 @@ nav[id$="Pagination"] {
     border: 1px solid transparent;
 }
 
-.btn-primary ,
-.btn-primary:active:focus,
-.btn-primary ,
-.btn-primary:active:focus,
-.btn-primary:active ,
-.btn-primary:focus 
-{
+.btn-primary,
+.btn-primary:active,
+.btn-primary:focus,
+.btn-primary:active:focus {
     color: #ffffff;
     background-color: var(--accent);
     border-color: var(--accent);
 }
 
-/* FIX: Stripped blue click box-shadow shadow bands */
-.btn-primary:hover{
+.btn-primary:hover {
     background-color: var(--accent-hover);
     border-color: var(--accent-hover);
     box-shadow: 0 14px 30px rgba(12, 119, 121, 0.2) !important;
@@ -512,13 +512,78 @@ p {
     transform: translate(-50%, -50%);
 }
 
+/* Keep modals and offcanvas out of page flow until opened */
+.modal {
+    display: none !important;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1055;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+
+.modal.show {
+    display: block !important;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.offcanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1045;
+    visibility: hidden;
+    background-color: var(--surface);
+}
+
+.offcanvas.show {
+    visibility: visible;
+}
+
+.offcanvas-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1040;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+@media (min-width: 992px) {
+    #sidebarOffcanvas {
+        display: none !important;
+        visibility: hidden !important;
+    }
+}
+
 @media (max-width: 991.98px) {
     main {
         flex-direction: column;
+        min-height: auto;
     }
 
     #sidebarContainer {
         display: none;
+        position: static;
+        flex: none;
+        width: auto;
+        min-width: 0;
+        max-width: none;
+        height: auto;
     }
 
     .content-area {
@@ -527,8 +592,6 @@ p {
 
     .sidebar {
         width: 100%;
-        min-width: auto;
-        position: relative;
         height: auto;
     }
 
