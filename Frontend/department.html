@@ -170,15 +170,19 @@
 
                 // Use pagination helper for departments (10 rows per page)
                 setupPagination('deptTableBody', 'deptPagination', deptCache, function(dept) {
+                    const employeeCount = dept.employees != null ? dept.employees : 0;
+                    const deleteDisabled = employeeCount > 0;
+                    const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
+                    const deleteButtonTitle = deleteDisabled ? 'Cannot delete department while employees are assigned' : 'Delete department';
                     return `
                         <tr id="row-dept-${dept.department_id}">
                             <td class="ps-4 fw-medium text-secondary">DPT-${String(dept.department_id).padStart(3, '0')}</td>
                             <td class="text-dark">${dept.department_name}</td>
-                            <td>${dept.employees != null ? dept.employees : 0}</td>
+                            <td>${employeeCount}</td>
                             <td class="text-end pe-4">
                                 <div class="btn-group gap-1">
                                     <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${dept.department_id})"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                    <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" aria-disabled="${deleteDisabled}" ${deleteDisabled ? 'disabled' : ''} onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -220,15 +224,19 @@
             }
 
             setupPagination('deptTableBody', 'deptPagination', data, function(dept) {
+                const employeeCount = dept.employees != null ? dept.employees : 0;
+                const deleteDisabled = employeeCount > 0;
+                const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
+                const deleteButtonTitle = deleteDisabled ? 'Cannot delete department while employees are assigned' : 'Delete department';
                 return `
                     <tr id="row-dept-${dept.department_id}">
                         <td class="ps-4 fw-medium text-secondary">DPT-${String(dept.department_id).padStart(3, '0')}</td>
                         <td class="text-dark">${dept.department_name}</td>
-                        <td>${dept.employees != null ? dept.employees : 0}</td>
+                        <td>${employeeCount}</td>
                         <td class="text-end pe-4">
                             <div class="btn-group gap-1">
                                 <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${dept.department_id})"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" ${deleteDisabled ? 'disabled' : ''} onclick="showDeleteConfirmation(${dept.department_id}, '${dept.department_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
                             </div>
                         </td>
                     </tr>

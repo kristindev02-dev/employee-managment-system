@@ -364,6 +364,21 @@ nav[id$="Pagination"] {
     border: 1px solid transparent;
 }
 
+.btn-outline-danger.disabled,
+.btn-outline-danger:disabled {
+    color: #6c757d !important;
+    background-color: transparent !important;
+    border-color: transparent !important;
+    cursor: not-allowed !important;
+}
+
+.btn-outline-danger.disabled:hover,
+.btn-outline-danger:disabled:hover {
+    color: #6c757d !important;
+    background-color: rgba(220, 53, 69, 0.08) !important;
+    border-color: rgba(220, 53, 69, 0.16) !important;
+}
+
 .btn-primary,
 .btn-primary:active,
 .btn-primary:focus,
@@ -402,10 +417,6 @@ nav[id$="Pagination"] {
     border-radius: 14px;
     border: 1px solid var(--border);
     color: var(--text-primary);
-}
-
-#employeeResetBtn:hover {
-    color: #ffffff;
 }
 
 .badge {

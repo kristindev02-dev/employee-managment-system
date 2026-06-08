@@ -153,9 +153,25 @@
     <script src="js/pagination.js"></script>
     <script>
         const API_URL = "http://localhost:8080/positions";
+        const EMPLOYEE_API_URL = "http://localhost:8080/employees";
         let posCache = [];
+        let employeeCache = [];
 
-        document.addEventListener("DOMContentLoaded", fetchAllPositions);
+        document.addEventListener("DOMContentLoaded", initializePositionPage);
+
+        async function initializePositionPage() {
+            await Promise.all([fetchEmployeeLookup(), fetchAllPositions()]);
+        }
+
+        async function fetchEmployeeLookup() {
+            try {
+                const response = await fetch(EMPLOYEE_API_URL);
+                employeeCache = await response.json();
+            } catch (error) {
+                console.warn('Unable to load employee lookup for position delete rules.', error);
+                employeeCache = [];
+            }
+        }
 
         // [R] READ LOOKUP ENGINE
         async function fetchAllPositions() {
@@ -172,6 +188,10 @@
 
                 // Use pagination helper for positions (10 rows per page)
                 setupPagination('posTableBody', 'posPagination', posCache, function(pos) {
+                    const positionUsed = employeeCache.some(emp => emp.position && (emp.position.position_id === pos.position_id || emp.position.id === pos.position_id));
+                    const deleteDisabled = positionUsed;
+                    const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
+                    const deleteButtonTitle = deleteDisabled ? 'Cannot delete position while employees are assigned' : 'Delete position';
                     return `
                         <tr id="row-pos-${pos.position_id}">
                             <td class="ps-4 fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
@@ -179,7 +199,7 @@
                             <td class="text-end pe-4">
                                 <div class="btn-group gap-1">
                                     <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
-                                    <button class="btn btn-sm btn-outline-danger" onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                    <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" aria-disabled="${deleteDisabled}" ${deleteDisabled ? 'disabled' : ''} onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
                                 </div>
                             </td>
                         </tr>
@@ -221,6 +241,10 @@
             }
 
             setupPagination('posTableBody', 'posPagination', data, function(pos) {
+                const positionUsed = employeeCache.some(emp => emp.position && (emp.position.position_id === pos.position_id || emp.position.id === pos.position_id));
+                const deleteDisabled = positionUsed;
+                const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
+                const deleteButtonTitle = deleteDisabled ? 'Cannot delete position while employees are assigned' : 'Delete position';
                 return `
                     <tr id="row-pos-${pos.position_id}">
                         <td class="ps-4 fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
@@ -228,7 +252,7 @@
                         <td class="text-end pe-4">
                             <div class="btn-group gap-1">
                                 <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                                <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" ${deleteDisabled ? 'disabled' : ''} onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
                             </div>
                         </td>
                     </tr>
