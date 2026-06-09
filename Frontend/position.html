@@ -74,7 +74,7 @@
                 <div class="modal-body p-4">
                     <form id="createPosForm" class="needs-validation" novalidate>
                         <div class="mb-3">
-                            <label for="regPosName" class="form-label fw-medium">Position / Title Name</label>
+                            <label for="regPosName" class="form-label fw-medium">Position / Title Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="regPosName" placeholder="e.g., Senior Developer" required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the position name (at least 2 characters).
@@ -104,7 +104,7 @@
                     <form id="editPosForm" class="needs-validation" novalidate>
                         <input type="hidden" id="editPosId">
                         <div class="mb-3">
-                            <label for="editPosName" class="form-label fw-medium">Position Name</label>
+                            <label for="editPosName" class="form-label fw-medium">Position Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editPosName" required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the position name (at least 2 characters).
@@ -121,7 +121,7 @@
     </div>
 
     <div class="modal fade" id="confirmDeletePositionModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-centered modal-sm" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-light py-3">
                     <h5 class="modal-title fw-semibold text-dark">

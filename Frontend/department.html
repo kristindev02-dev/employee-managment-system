@@ -62,10 +62,10 @@
     </div>
 
     <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-centered modal-sm" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-light py-3">
-                    <h5 class="modal-title fw-semibold text-dark">
+                    <h5 class="modal-title fw-semibold text-dark fs-5">
                         <i class="bi bi-exclamation-triangle me-2 text-danger"></i>Confirm Delete
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -93,7 +93,7 @@
                 <div class="modal-body p-4">
                     <form id="createDeptForm" class="needs-validation" novalidate>
                         <div class="mb-3">
-                            <label for="regDeptName" class="form-label fw-medium">Department Name</label>
+                            <label for="regDeptName" class="form-label fw-medium">Department Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="regDeptName" placeholder="e.g., IT Department" required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the department name (at least 2 characters).
@@ -122,7 +122,7 @@
                     <form id="editDeptForm" class="needs-validation" novalidate>
                         <input type="hidden" id="editDeptId">
                         <div class="mb-3">
-                            <label for="editDeptName" class="form-label fw-medium">Department Name</label>
+                            <label for="editDeptName" class="form-label fw-medium">Department Name <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editDeptName" required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the department name (at least 2 characters).

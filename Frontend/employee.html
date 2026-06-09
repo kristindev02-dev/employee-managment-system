@@ -43,12 +43,12 @@
                                 <input type="search" id="employeeSearch" class="form-control border-start-0 bg-transparent" placeholder="Search employee name..." aria-label="Search employee name">
                             </div>
                         </div>
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-3">
                             <select id="departmentFilter" class="form-select filter-select" aria-label="Filter by department">
                                 <option value="">All departments</option>
                             </select>
                         </div>
-                        <div class="col-12 col-md-2">
+                        <div class="col-12 col-md-3">
                             <select id="positionFilter" class="form-select filter-select" aria-label="Filter by position">
                                 <option value="">All positions</option>
                             </select>
@@ -63,8 +63,8 @@
                         <table class="table table-hover align-middle mb-0" id="employeeTable">
                             <thead class="table-light">
                                 <tr>
-                                    <th scope="col" class="ps-4">ID</th>
-                                    <th scope="col">Name</th>
+                                    <th scope="col" class="ps-4">Emp ID</th>
+                                    <th scope="col">Emp Name</th>
                                     <th scope="col">Email</th>
                                     <th scope="col">Department</th>
                                     <th scope="col">Position</th>
@@ -173,7 +173,7 @@
                     <div class="modal-body p-4">
                         <form id="createEmployeeForm" class="row g-3 needs-validation" novalidate>
                             <div class="col-12">
-                                <label for="regName" class="form-label fw-medium">Full Name</label>
+                                <label for="regName" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="regName" placeholder="Enter full name"
                                     required minlength="3">
                                 <div class="invalid-feedback">
@@ -181,7 +181,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regEmail" class="form-label fw-medium">Email Address</label>
+                                <label for="regEmail" class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="regEmail" placeholder="name@company.com"
                                     required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
                                 <div class="invalid-feedback">
@@ -189,21 +189,21 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regPhone" class="form-label fw-medium">Phone Number</label>
+                                <label for="regPhone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
                                 <input type="text" inputmode="numeric" class="form-control" id="regPhone" placeholder="09123456789" required pattern="^(\+95|09|0)(?:[\s]?\d){7,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
                                 <div class="invalid-feedback">
                                     Please enter a valid phone number [9-11 digits]
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="regJoinedDate" class="form-label fw-medium">Joined Date</label>
+                                <label for="regJoinedDate" class="form-label fw-medium">Joined Date <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="regJoinedDate" required>
                                 <div class="invalid-feedback">
                                     Please choose the employee's joining date.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regDepartment" class="form-label fw-medium">Department Assignment</label>
+                                <label for="regDepartment" class="form-label fw-medium">Department Assignment <span class="text-danger">*</span></label>
                                 <select class="form-select" id="regDepartment" required>
                                     <option selected disabled value="">Choose Department...</option>
                                 </select>
@@ -212,7 +212,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regPosition" class="form-label fw-medium">Position Title</label>
+                                <label for="regPosition" class="form-label fw-medium">Position Title <span class="text-danger">*</span></label>
                                 <select class="form-select" id="regPosition" required>
                                     <option selected disabled value="">Choose Position...</option>
                                 </select>
@@ -221,7 +221,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="regSalary" class="form-label fw-medium">Base Salary</label>
+                                <label for="regSalary" class="form-label fw-medium">Base Salary <span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
                                     <input type="text" inputmode="numeric" class="form-control" id="regSalary" placeholder="0.00" min="0"
@@ -255,35 +255,35 @@
                         <form id="editEmployeeForm" class="row g-3 needs-validation" novalidate>
                             <input type="hidden" id="editEmployeeId">
                             <div class="col-12">
-                                <label for="editName" class="form-label fw-medium">Full Name</label>
+                                <label for="editName" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editName" required minlength="3">
                                 <div class="invalid-feedback">
                                     Please enter the employee's full name (at least 3 characters).
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editEmail" class="form-label fw-medium">Email Address</label>
+                                <label for="editEmail" class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="editEmail" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
                                 <div class="invalid-feedback">
                                     Please enter a valid email address.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editPhone" class="form-label fw-medium">Phone Number</label>
+                                <label for="editPhone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
                                 <input type="text" inputmode="numeric" class="form-control" id="editPhone" required pattern="^(\+95|09|0)(?:[\s]?\d){9,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
                                 <div class="invalid-feedback">
                                     Please enter a valid phone number [9-11 digits].
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="editJoinedDate" class="form-label fw-medium">Joined Date</label>
+                                <label for="editJoinedDate" class="form-label fw-medium">Joined Date <span class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="editJoinedDate" required>
                                 <div class="invalid-feedback">
                                     Please choose the employee's joining date.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editDepartment" class="form-label fw-medium">Department</label>
+                                <label for="editDepartment" class="form-label fw-medium">Department <span class="text-danger">*</span></label>
                                 <select class="form-select" id="editDepartment" required>
                                     <option selected disabled value="">Choose Department...</option>
                                 </select>
@@ -292,7 +292,7 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editPosition" class="form-label fw-medium">Position</label>
+                                <label for="editPosition" class="form-label fw-medium">Position <span class="text-danger">*</span></label>
                                 <select class="form-select" id="editPosition" required>
                                     <option selected disabled value="">Choose Position...</option>
                                 </select>
@@ -301,7 +301,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="editSalary" class="form-label fw-medium">Base Salary ($)</label>
+                                <label for="editSalary" class="form-label fw-medium">Base Salary ($) <span class="text-danger">*</span></label>
                                 <input type="text" inputmode="numeric" class="form-control" id="editSalary" min="0" step="0.01" required>
                                 <div class="invalid-feedback">
                                     Please enter a salary greater than or equal to 0.
@@ -320,7 +320,7 @@
     </main>
 
     <div class="modal fade" id="confirmDeleteEmployeeModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-dialog modal-dialog-centered modal-sm" style="max-width: 400px;">
             <div class="modal-content border-0 shadow-lg">
                 <div class="modal-header bg-light py-3">
                     <h5 class="modal-title fw-semibold text-dark">
