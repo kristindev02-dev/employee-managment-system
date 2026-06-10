@@ -15,7 +15,8 @@
         <div id="sidebarContainer"></div>
 
         <div class="content-area flex-grow-1 p-4">
-            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
+            <button class="btn btn-outline-secondary d-lg-none mb-3 sidebar-toggler" type="button"
+                data-bs-toggle="offcanvas" data-bs-target="#sidebarOffcanvas" aria-controls="sidebarOffcanvas">
                 <i class="bi bi-list"></i>
                 Menu
             </button>
@@ -28,8 +29,8 @@
                         <h1 class="h2 mb-1" style="font-size: 2.5rem; font-weight: 800 
                         !important; color: var(--text-secondary);">Position Management</h1>
                     </div>
-                    <button class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm" data-bs-toggle="modal"
-                        data-bs-target="#posModal">
+                    <button class="btn btn-primary d-inline-flex align-items-center gap-2 shadow-sm"
+                        data-bs-toggle="modal" data-bs-target="#posModal">
                         <i class="bi bi-briefcase-fill fs-5"></i>
                         <span>Add New Position</span>
                     </button>
@@ -37,8 +38,10 @@
 
                 <div class="search-panel mb-4">
                     <div class="input-group search-input-group">
-                        <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
-                        <input type="search" id="posSearch" class="form-control border-start-0 bg-transparent" placeholder="Search position name..." aria-label="Search position name">
+                        <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                class="bi bi-search"></i></span>
+                        <input type="search" id="posSearch" class="form-control border-start-0 bg-transparent"
+                            placeholder="Search position name..." aria-label="Search position name">
                     </div>
                 </div>
                 <div class="card border-0 shadow-sm table-card">
@@ -55,8 +58,17 @@
                         </table>
                     </div>
                 </div>
-                <nav id="posPagination" class="mt-3" aria-label="Position table pagination"></nav>
+                <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                    <div class="table-summary-text" id="positionTotalRows" style="flex: 1;">
+                        Total rows: 0
+                    </div>
 
+                    <div style="flex: 1; display: flex; justify-content: center;">
+                        <nav id="posPagination" class="mt-3" aria-label="Position table pagination"></nav>
+                    </div>
+
+                    <div style="flex: 1;"></div>
+                </div>
             </div>
         </div>
     </main>
@@ -74,8 +86,10 @@
                 <div class="modal-body p-4">
                     <form id="createPosForm" class="needs-validation" novalidate>
                         <div class="mb-3">
-                            <label for="regPosName" class="form-label fw-medium">Position / Title Name <span class="text-danger">*</span></label>
-                            <input type="text" class="form-control" id="regPosName" placeholder="e.g., Senior Developer" required minlength="2">
+                            <label for="regPosName" class="form-label fw-medium">Position / Title Name <span
+                                    class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="regPosName" placeholder="e.g., Senior Developer"
+                                required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the position name (at least 2 characters).
                             </div>
@@ -104,7 +118,8 @@
                     <form id="editPosForm" class="needs-validation" novalidate>
                         <input type="hidden" id="editPosId">
                         <div class="mb-3">
-                            <label for="editPosName" class="form-label fw-medium">Position Name <span class="text-danger">*</span></label>
+                            <label for="editPosName" class="form-label fw-medium">Position Name <span
+                                    class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="editPosName" required minlength="2">
                             <div class="invalid-feedback">
                                 Please enter the position name (at least 2 characters).
@@ -130,7 +145,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4 text-center">
-                    <p class="mb-0 fw-semibold">Are you sure you want to delete the position <span id="deletePositionName" class="text-danger"></span>?</p>
+                    <p class="mb-0 fw-semibold">Are you sure you want to delete the position <span
+                            id="deletePositionName" class="text-danger"></span>?</p>
                 </div>
                 <div class="modal-footer border-top p-3 justify-content-center gap-2">
                     <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
@@ -179,38 +195,47 @@
             try {
                 const response = await fetch(API_URL);
                 posCache = await response.json();
-                
+
                 const tableBody = document.getElementById("posTableBody");
                 if (posCache.length === 0) {
                     tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted py-4">No positions registered in database.</td></tr>`;
                     document.getElementById('posPagination').innerHTML = '';
+                    updatePositionTotal(0);
                     return;
                 }
 
                 // Use pagination helper for positions (10 rows per page)
-                setupPagination('posTableBody', 'posPagination', posCache, function(pos) {
+                setupPagination('posTableBody', 'posPagination', posCache, function (pos) {
                     const positionUsed = employeeCache.some(emp => emp.position && (emp.position.position_id === pos.position_id || emp.position.id === pos.position_id));
                     const deleteDisabled = positionUsed;
                     const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
                     const deleteButtonTitle = deleteDisabled ? 'Cannot delete position while employees are assigned' : 'Delete position';
                     return `
-                        <tr id="row-pos-${pos.position_id}">
-                            <td class="ps-4 fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
-                            <td class="text-dark">${pos.position_name}</td>
-                            <td class="text-end pe-4">
-                                <div class="btn-group gap-1">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
-                                    <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" aria-disabled="${deleteDisabled}" ${deleteDisabled ? 'disabled' : ''} onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
-                                </div>
-                            </td>
-                        </tr>
-                    `;
+                    <tr id="row-pos-${pos.position_id}">
+                        <td class="ps-4 py-1 align-middle fw-medium text-secondary">POS-${String(pos.position_id).padStart(3, '0')}</td>
+                        <td class="text-dark py-1 align-middle">${pos.position_name}</td>
+                        <td class="text-end pe-4 py-1 align-middle">
+                        <div class="btn-group gap-1">
+                            <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${pos.position_id})"><i class="bi bi-pencil"></i></button>
+                            <button type="button" class="${deleteButtonClasses}" title="${deleteButtonTitle}" aria-disabled="${deleteDisabled}" ${deleteDisabled ? 'disabled' : ''} onclick="showPositionDeleteConfirmation(${pos.position_id}, '${pos.position_name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                        </div>
+                        </td>
+                    </tr>
+`;;
                 }, 5);
+                updatePositionTotal(posCache.length);
             } catch (error) {
                 console.error("Database connection failure:", error);
                 document.getElementById("posTableBody").innerHTML = `<tr><td colspan="3" class="text-center text-danger py-4">Error: Unable to connect to backend server.</td></tr>`;
+                updatePositionTotal(0);
                 showFlashMessage('danger', 'Unable to load positions.');
             }
+        }
+
+        function updatePositionTotal(count) {
+            const totalEl = document.getElementById('positionTotalRows');
+            if (!totalEl) return;
+            totalEl.textContent = `Total rows: ${count}`;
         }
 
         function showFlashMessage(type, message, autoDismissMs = 5000) {
@@ -241,10 +266,11 @@
             if (data.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="3" class="text-center text-muted py-4">No positions match your search.</td></tr>`;
                 document.getElementById('posPagination').innerHTML = '';
+                updatePositionTotal(0);
                 return;
             }
 
-            setupPagination('posTableBody', 'posPagination', data, function(pos) {
+            setupPagination('posTableBody', 'posPagination', data, function (pos) {
                 const positionUsed = employeeCache.some(emp => emp.position && (emp.position.position_id === pos.position_id || emp.position.id === pos.position_id));
                 const deleteDisabled = positionUsed;
                 const deleteButtonClasses = deleteDisabled ? 'btn btn-sm btn-outline-danger disabled' : 'btn btn-sm btn-outline-danger';
@@ -262,6 +288,7 @@
                     </tr>
                 `;
             }, 5);
+            updatePositionTotal(data.length);
         }
 
         document.getElementById('posSearch').addEventListener('input', function () {
@@ -319,7 +346,7 @@
             if (!this.checkValidity()) return;
 
             const id = document.getElementById('editPosId').value;
-            
+
             // FIXED: Building object using proper tracking ID and tracking title strings
             const payload = {
                 position_id: parseInt(id),

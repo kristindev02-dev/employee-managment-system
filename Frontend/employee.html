@@ -39,22 +39,28 @@
                     <div class="row g-3 align-items-center">
                         <div class="col-12 col-md-5">
                             <div class="input-group search-input-group">
-                                <span class="input-group-text bg-transparent border-end-0 text-secondary"><i class="bi bi-search"></i></span>
-                                <input type="search" id="employeeSearch" class="form-control border-start-0 bg-transparent" placeholder="Search employee name..." aria-label="Search employee name">
+                                <span class="input-group-text bg-transparent border-end-0 text-secondary"><i
+                                        class="bi bi-search"></i></span>
+                                <input type="search" id="employeeSearch"
+                                    class="form-control border-start-0 bg-transparent"
+                                    placeholder="Search employee name..." aria-label="Search employee name">
                             </div>
                         </div>
                         <div class="col-12 col-md-3">
-                            <select id="departmentFilter" class="form-select filter-select" aria-label="Filter by department">
+                            <select id="departmentFilter" class="form-select filter-select"
+                                aria-label="Filter by department">
                                 <option value="">All departments</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-3">
-                            <select id="positionFilter" class="form-select filter-select" aria-label="Filter by position">
+                            <select id="positionFilter" class="form-select filter-select"
+                                aria-label="Filter by position">
                                 <option value="">All positions</option>
                             </select>
                         </div>
                         <div class="col-12 col-md-1 d-flex justify-content-end">
-                            <button id="employeeResetBtn" type="button" class="btn btn-light border fw-normal">Reset</button>
+                            <button id="employeeResetBtn" type="button"
+                                class="btn btn-light border fw-normal">Reset</button>
                         </div>
                     </div>
                 </div>
@@ -75,8 +81,19 @@
                             <tbody id="employeeTableBody"></tbody>
                         </table>
                     </div>
-                 </div>
-                 <nav id="employeePagination" class="mt-3" aria-label="Employee table pagination"></nav>
+                </div>
+                <div
+                    style="display: flex; align-items: center; justify-content: space-between; width: 100%; margin-top: 5px; padding-top: 5px;">
+                    <div class="table-summary-text" id="employeeTotalRows" style="flex: 1;">
+                        Total rows: 0
+                    </div>
+
+                    <div style="flex: 1; display: flex; justify-content: center; align-items: center;">
+                        <nav id="employeePagination" aria-label="Employee table pagination"></nav>
+                    </div>
+
+                    <div style="flex: 1;"></div>
+                </div>
             </div>
         </div>
 
@@ -155,7 +172,7 @@
                     </div>
                     <div class="modal-footer border-0 bg-light py-2">
                         <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Close
-                            </button>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -173,7 +190,8 @@
                     <div class="modal-body p-4">
                         <form id="createEmployeeForm" class="row g-3 needs-validation" novalidate>
                             <div class="col-12">
-                                <label for="regName" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
+                                <label for="regName" class="form-label fw-medium">Full Name <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="regName" placeholder="Enter full name"
                                     required minlength="3">
                                 <div class="invalid-feedback">
@@ -181,29 +199,36 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regEmail" class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
+                                <label for="regEmail" class="form-label fw-medium">Email Address <span
+                                        class="text-danger">*</span></label>
                                 <input type="email" class="form-control" id="regEmail" placeholder="name@company.com"
-                                    required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
+                                    required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                    title="Email must contain one @ and at least one dot after it, with no spaces">
                                 <div class="invalid-feedback">
                                     Please enter a valid email address.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regPhone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" inputmode="numeric" class="form-control" id="regPhone" placeholder="09123456789" required pattern="^(\+95|09|0)(?:[\s]?\d){7,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
+                                <label for="regPhone" class="form-label fw-medium">Phone Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" inputmode="numeric" class="form-control" id="regPhone"
+                                    placeholder="09123456789" required pattern="^(\+95|09|0)(?:[\s]?\d){7,11}$"
+                                    title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
                                 <div class="invalid-feedback">
                                     Please enter a valid phone number [9-11 digits]
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="regJoinedDate" class="form-label fw-medium">Joined Date <span class="text-danger">*</span></label>
+                                <label for="regJoinedDate" class="form-label fw-medium">Joined Date <span
+                                        class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="regJoinedDate" required>
                                 <div class="invalid-feedback">
                                     Please choose the employee's joining date.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regDepartment" class="form-label fw-medium">Department Assignment <span class="text-danger">*</span></label>
+                                <label for="regDepartment" class="form-label fw-medium">Department Assignment <span
+                                        class="text-danger">*</span></label>
                                 <select class="form-select" id="regDepartment" required>
                                     <option selected disabled value="">Choose Department...</option>
                                 </select>
@@ -212,7 +237,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="regPosition" class="form-label fw-medium">Position Title <span class="text-danger">*</span></label>
+                                <label for="regPosition" class="form-label fw-medium">Position Title <span
+                                        class="text-danger">*</span></label>
                                 <select class="form-select" id="regPosition" required>
                                     <option selected disabled value="">Choose Position...</option>
                                 </select>
@@ -221,11 +247,12 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="regSalary" class="form-label fw-medium">Base Salary <span class="text-danger">*</span></label>
+                                <label for="regSalary" class="form-label fw-medium">Base Salary <span
+                                        class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text">$</span>
-                                    <input type="text" inputmode="numeric" class="form-control" id="regSalary" placeholder="0.00" min="0"
-                                        step="0.01" required>
+                                    <input type="text" inputmode="numeric" class="form-control" id="regSalary"
+                                        placeholder="0.00" min="0" step="0.01" required>
                                 </div>
                                 <div class="invalid-feedback">
                                     Please enter a salary greater than or equal to 0.
@@ -255,35 +282,44 @@
                         <form id="editEmployeeForm" class="row g-3 needs-validation" novalidate>
                             <input type="hidden" id="editEmployeeId">
                             <div class="col-12">
-                                <label for="editName" class="form-label fw-medium">Full Name <span class="text-danger">*</span></label>
+                                <label for="editName" class="form-label fw-medium">Full Name <span
+                                        class="text-danger">*</span></label>
                                 <input type="text" class="form-control" id="editName" required minlength="3">
                                 <div class="invalid-feedback">
                                     Please enter the employee's full name (at least 3 characters).
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editEmail" class="form-label fw-medium">Email Address <span class="text-danger">*</span></label>
-                                <input type="email" class="form-control" id="editEmail" required pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$" title="Email must contain one @ and at least one dot after it, with no spaces">
+                                <label for="editEmail" class="form-label fw-medium">Email Address <span
+                                        class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="editEmail" required
+                                    pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+                                    title="Email must contain one @ and at least one dot after it, with no spaces">
                                 <div class="invalid-feedback">
                                     Please enter a valid email address.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editPhone" class="form-label fw-medium">Phone Number <span class="text-danger">*</span></label>
-                                <input type="text" inputmode="numeric" class="form-control" id="editPhone" required pattern="^(\+95|09|0)(?:[\s]?\d){9,11}$" title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
+                                <label for="editPhone" class="form-label fw-medium">Phone Number <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" inputmode="numeric" class="form-control" id="editPhone" required
+                                    pattern="^(\+95|09|0)(?:[\s]?\d){9,11}$"
+                                    title="Enter a valid phone number starting with +95, 09, or 0. Spaces are allowed">
                                 <div class="invalid-feedback">
                                     Please enter a valid phone number [9-11 digits].
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="editJoinedDate" class="form-label fw-medium">Joined Date <span class="text-danger">*</span></label>
+                                <label for="editJoinedDate" class="form-label fw-medium">Joined Date <span
+                                        class="text-danger">*</span></label>
                                 <input type="date" class="form-control" id="editJoinedDate" required>
                                 <div class="invalid-feedback">
                                     Please choose the employee's joining date.
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editDepartment" class="form-label fw-medium">Department <span class="text-danger">*</span></label>
+                                <label for="editDepartment" class="form-label fw-medium">Department <span
+                                        class="text-danger">*</span></label>
                                 <select class="form-select" id="editDepartment" required>
                                     <option selected disabled value="">Choose Department...</option>
                                 </select>
@@ -292,7 +328,8 @@
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <label for="editPosition" class="form-label fw-medium">Position <span class="text-danger">*</span></label>
+                                <label for="editPosition" class="form-label fw-medium">Position <span
+                                        class="text-danger">*</span></label>
                                 <select class="form-select" id="editPosition" required>
                                     <option selected disabled value="">Choose Position...</option>
                                 </select>
@@ -301,8 +338,10 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="editSalary" class="form-label fw-medium">Base Salary ($) <span class="text-danger">*</span></label>
-                                <input type="text" inputmode="numeric" class="form-control" id="editSalary" min="0" step="0.01" required>
+                                <label for="editSalary" class="form-label fw-medium">Base Salary ($) <span
+                                        class="text-danger">*</span></label>
+                                <input type="text" inputmode="numeric" class="form-control" id="editSalary" min="0"
+                                    step="0.01" required>
                                 <div class="invalid-feedback">
                                     Please enter a salary greater than or equal to 0.
                                 </div>
@@ -329,7 +368,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body p-4 text-center">
-                    <p class="mb-0 fw-semibold">Are you sure you want to delete the employee <span id="deleteEmployeeName" class="text-danger"></span>?</p>
+                    <p class="mb-0 fw-semibold">Are you sure you want to delete the employee <span
+                            id="deleteEmployeeName" class="text-danger"></span>?</p>
                 </div>
                 <div class="modal-footer border-top p-3 justify-content-center gap-2">
                     <button type="button" class="btn btn-light border" data-bs-dismiss="modal">Cancel</button>
@@ -454,30 +494,38 @@
             if (data.length === 0) {
                 tableBody.innerHTML = `<tr><td colspan="7" class="text-center text-muted py-4">No employee records match your search.</td></tr>`;
                 document.getElementById('employeePagination').innerHTML = '';
+                updateEmployeeTotal(0);
                 return;
             }
 
-            setupPagination('employeeTableBody', 'employeePagination', data, function(emp) {
+            setupPagination('employeeTableBody', 'employeePagination', data, function (emp) {
                 const deptName = emp.department ? (emp.department.department_name || "Unassigned") : "Unassigned";
                 const posName = emp.position ? (emp.position.position_name || "Unassigned") : "Unassigned";
                 return `
-                    <tr id="row-${emp.id}">
-                        <td class="ps-4 text-dark">EMP-${String(emp.id).padStart(3, '0')}</td>
-                        <td class="text-dark">${emp.name}</td>
-                        <td class="text-dark">${emp.email}</td>
-                        <td class="text-dark">${deptName}</td>
-                        <td class="text-dark">${posName}</td>
-                        <td class="text-dark">${normalizeDateForInput(emp.joinedDate) || 'N/A'}</td>
-                        <td class="text-end pe-4">
-                            <div class="btn-group gap-1">
-                                <button class="btn btn-sm btn-outline-info" onclick="triggerViewModal(${emp.id})"><i class="bi bi-eye"></i></button>
-                                <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${emp.id})"><i class="bi bi-pencil"></i></button>
-                                <button class="btn btn-sm btn-outline-danger" onclick="showEmployeeDeleteConfirmation(${emp.id}, '${emp.name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                <tr id="row-${emp.id}">
+                    <td class="ps-4 py-1 align-middle text-dark">EMP-${String(emp.id).padStart(3, '0')}</td>
+                    <td class="text-dark py-1 align-middle">${emp.name}</td>
+                    <td class="text-dark py-1 align-middle">${emp.email}</td>
+                    <td class="text-dark py-1 align-middle">${deptName}</td>
+                    <td class="text-dark py-1 align-middle">${posName}</td>
+                    <td class="text-dark py-1 align-middle">${normalizeDateForInput(emp.joinedDate) || 'N/A'}</td>
+                    <td class="text-end pe-4 py-1 align-middle">
+                        <div class="btn-group gap-1">
+                            <button class="btn btn-sm btn-outline-info" onclick="triggerViewModal(${emp.id})"><i class="bi bi-eye"></i></button>
+                            <button class="btn btn-sm btn-outline-primary" onclick="triggerEditModal(${emp.id})"><i class="bi bi-pencil"></i></button>
+                            <button class="btn btn-sm btn-outline-danger" onclick="showEmployeeDeleteConfirmation(${emp.id}, '${emp.name.replace(/'/g, "\\'")}')"><i class="bi bi-trash"></i></button>
+                        </div>
+                    </td>
+                </tr>
+            `;
             }, 5);
+            updateEmployeeTotal(data.length);
+        }
+
+        function updateEmployeeTotal(count) {
+            const totalEl = document.getElementById('employeeTotalRows');
+            if (!totalEl) return;
+            totalEl.textContent = `Total rows: ${count}`;
         }
 
         //Numeric only input box
@@ -493,16 +541,16 @@
             event.preventDefault();
             if (!this.checkValidity()) { this.classList.add('was-validated'); return; }
 
-const regDeptValue = document.getElementById('regDepartment').value;
-                const regPosValue = document.getElementById('regPosition').value;
-                const payload = {
-                    name: document.getElementById('regName').value,
-                    email: document.getElementById('regEmail').value,
-                    phoneNo: document.getElementById('regPhone').value,
-                    joinedDate: document.getElementById('regJoinedDate').value,
-                    salary: parseFloat(document.getElementById('regSalary').value) || 0,
-                    department: regDeptValue ? { department_id: parseInt(regDeptValue) } : null,
-                    position: regPosValue ? { position_id: parseInt(regPosValue) } : null
+            const regDeptValue = document.getElementById('regDepartment').value;
+            const regPosValue = document.getElementById('regPosition').value;
+            const payload = {
+                name: document.getElementById('regName').value,
+                email: document.getElementById('regEmail').value,
+                phoneNo: document.getElementById('regPhone').value,
+                joinedDate: document.getElementById('regJoinedDate').value,
+                salary: parseFloat(document.getElementById('regSalary').value) || 0,
+                department: regDeptValue ? { department_id: parseInt(regDeptValue) } : null,
+                position: regPosValue ? { position_id: parseInt(regPosValue) } : null
             };
 
             try {

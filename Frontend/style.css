@@ -241,6 +241,22 @@ main {
     transition: background-color 0.2s ease-in-out;
 }
 
+/* This forces the specific position table body cells to shrink tightly */
+#posTableBody td 
+,#deptTableBody td,
+#employeeTableBody td {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
+/* Reduces padding inside the action buttons slightly so they don't stretch the row */
+#posTableBody .btn-sm,
+#deptTableBody .btn-sm,
+#employeeTableBody .btn-sm {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+
 /* FIX: Changed table row hover accent to match the palette */
 .table tbody tr:hover {
     background-color: rgba(36, 158, 148, 0.08);
@@ -253,6 +269,12 @@ main {
 .table-responsive {
     border-radius: 0 0 16px 16px;
     overflow: hidden;
+}
+
+.table-summary-text {
+    margin-top: 10px;
+    color: var(--text-secondary);
+    font-weight: 600;
 }
 
 /* ==========================================================================
